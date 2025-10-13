@@ -1,0 +1,15 @@
+class Solution:
+    def removeAnagrams(self, words: List[str]) -> List[str]:
+        def canonical(w:str):
+            cnt=[0]*26
+            for ch in w:
+                cnt[ord(ch)-ord('a')]+=1
+            return tuple(cnt)
+        ans=[]
+        prev_form=None
+        for w in words:
+            form=canonical(w)
+            if form!=prev_form:
+                ans.append(w)
+                prev_form=form
+        return ans
