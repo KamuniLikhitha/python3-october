@@ -1,0 +1,30 @@
+class Solution:
+    def maxPartitionsAfterOperations(self, s: str, k: int) -> int:
+        n  = len(s)
+        b = [1 << (ord(c) - 97) for c in  s]
+        def f(a):
+            pc,pm,m,g = [0],[0],0,0
+            for x in a:
+                m |= x
+                if m.bit_count() > k:
+                    g += 1
+                    m= x
+                pc.append(g)
+                pm.append(m)
+            return pc,pm
+        pc,pm = f(b)
+        sc,sm = f(b[::-1])
+        res = 0
+        for i in range(n):
+            lg,rg = pc[i],sc[-(i+2)]
+            lm,rm = pm[i],sm[-(i+2)]
+            cm = lm|rm
+            lb,rb,cb = lm.bit_count(),rm.bit_count(),cm.bit_count()
+            if min(cb + 1,26) <= k:
+                t = lg + rg + 1
+            elif lb ==rb == k and cb < 26:
+                t = lg + rg + 3
+            else:
+                t = lg +rg + 2
+            res = max(res,t)
+        return res
