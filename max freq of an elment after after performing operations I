@@ -1,0 +1,20 @@
+class Solution:
+    def maxFrequency(self, nums: List[int], k: int, numOperations: int) -> int:
+        count = Counter(nums)
+        events = []
+        for num in nums:
+            events.append((num - k, 1))
+            events.append((num + k + 1,-1))
+        events.sort()
+        curr = 0
+        ans = 0
+        i = 0
+        unique_positions = sorted(set([num - k for num in nums] + [num + k + 1 for num in nums] + nums))
+        for x in sorted(unique_positions):
+            while i < len(events) and events[i][0] <= x:
+                curr += events[i][1]
+                i += 1
+            already = count.get(x,0)
+            transformable = curr - already
+            ans = max(ans,already + min(numOperations,transformable))
+        return ans
