@@ -1,0 +1,20 @@
+class Solution:
+    def nextBeautifulNumber(self, n: int) -> int:
+        def isBalanced(x):
+            freq={}
+            temp=x
+            while temp>0:
+                d=temp%10
+                temp//=10
+                if d==0:
+                    return False
+                freq[d]=freq.get(d,0)+1
+            for d,c in freq.items():
+                if d!=c:
+                    return False
+            return True
+        num=n+1
+        while True:
+            if isBalanced(num):
+                return num
+            num+=1
